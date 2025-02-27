@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boombaam Weather</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: url('https://media.istockphoto.com/photos/storm-clouds-picture-id1299444314?b=1&k=20&m=1299444314&s=170667a&w=0&h=qxgtxmc4ZVpgJop4ZaWSciDK1f1jr2B50gqnmSrSehc=') no-repeat center center/cover;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: #ffcc00;
+            color: black;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff9900;
+        }
+        #weather {
+            margin-top: 20px;
+        }
+        img {
+            width: 80px;
+            height: 80px;
+        }
+        #h1{
+            color: rgb(226, 247, 199);
+            font-family: "Knewave", system-ui;
+            font-weight: 500;
+            font-style: normal;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 id="h1">Weather In One Click</h1>
+        <input type="text" id="location" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weather"></div>
+    </div>
+    <script>
+        async function getWeather() {
+            const location = document.getElementById('location').value;
+            if (!location) {
+                alert('Please enter a city name');
+                return;
+            }
+            
+            const apiKey = '9a3c78c76ce04ea7b5d194953252702';
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                document.getElementById('weather').innerHTML = `
+                    <h2>${data.location.name}, ${data.location.country}</h2>
+                    <p>${data.current.condition.text}</p>
+                    <img src="${data.current.condition.icon}" alt="Weather icon">
+                    <p>Temperature: ${data.current.temp_c}°C</p>
+                    <p>Humidity: ${data.current.humidity}%</p>
+                    <p>Wind Speed: ${data.current.wind_kph} kph</p>
+                `;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                alert('Could not fetch weather data. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
 
